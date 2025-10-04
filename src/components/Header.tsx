@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [showBanner, setShowBanner] = useState(true);
@@ -61,9 +62,11 @@ const Header = () => {
               <Button variant="default" size="lg" className="hidden sm:inline-flex">
                 Hire iOS Dev
               </Button>
-              <Button variant="ghost" size="lg" className="hidden sm:inline-flex">
-                Login
-              </Button>
+              <Link to="/admin/auth/login">
+                <Button variant="ghost" size="lg" className="hidden sm:inline-flex">
+                  Login
+                </Button>
+              </Link>
               <Button variant="default" size="sm" className="sm:hidden">
                 Hire
               </Button>

@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          account_type: Database["public"]["Enums"]["account_type"]
+          city: string
+          corporate_registration_number: string | null
+          created_at: string
+          first_name: string
+          id: string
+          job_title: string | null
+          last_name: string
+          organization: string | null
+          phone_number: string
+          referral_code: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          work_email: string
+        }
+        Insert: {
+          account_type: Database["public"]["Enums"]["account_type"]
+          city: string
+          corporate_registration_number?: string | null
+          created_at?: string
+          first_name: string
+          id?: string
+          job_title?: string | null
+          last_name: string
+          organization?: string | null
+          phone_number: string
+          referral_code?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          work_email: string
+        }
+        Update: {
+          account_type?: Database["public"]["Enums"]["account_type"]
+          city?: string
+          corporate_registration_number?: string | null
+          created_at?: string
+          first_name?: string
+          id?: string
+          job_title?: string | null
+          last_name?: string
+          organization?: string | null
+          phone_number?: string
+          referral_code?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          work_email?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +76,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      account_type: "organisation" | "individual"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +203,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      account_type: ["organisation", "individual"],
+    },
   },
 } as const
