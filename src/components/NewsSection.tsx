@@ -1,9 +1,14 @@
+import cnbcLogo from "@/assets/CNBC.png";
+import foxNewsLogo from "@/assets/FOX.png";
+import cbsLogo from "@/assets/CBS.png";
+import usaTodayLogo from "@/assets/USA-TODAY.png";
+
 const NewsSection = () => {
   const mediaLogos = [
-    { name: "NBC", color: "from-red-500 via-yellow-500 to-green-500" },
-    { name: "FOX NEWS", color: "from-blue-900 to-red-600" },
-    { name: "CBS", color: "from-blue-600 to-blue-700" },
-    { name: "USA TODAY", color: "from-blue-400 to-blue-500" }
+    { name: "CNBC", logo: cnbcLogo },
+    { name: "FOX NEWS", logo: foxNewsLogo },
+    { name: "CBS", logo: cbsLogo },
+    { name: "USA TODAY", logo: usaTodayLogo }
   ];
 
   return (
@@ -24,9 +29,11 @@ const NewsSection = () => {
               key={index}
               className="flex items-center justify-center p-8 bg-card border border-border rounded-lg hover:shadow-lg transition-shadow"
             >
-              <div className={`bg-gradient-to-r ${media.color} text-white font-bold text-2xl px-6 py-4 rounded`}>
-                {media.name}
-              </div>
+              <img
+                src={media.logo}
+                alt={media.name}
+                className="max-h-20 w-auto object-contain"
+              />
             </div>
           ))}
         </div>

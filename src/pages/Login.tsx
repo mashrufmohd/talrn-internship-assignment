@@ -9,37 +9,36 @@ import { z } from "zod";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSendOtp = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      loginSchema.parse({ email });
+      loginSchema.parse({ email, password });
       setLoading(true);
 
-      const { error } = await supabase.auth.signInWithOtp({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-        },
+        password,
       });
 
       if (error) throw error;
 
-      setOtpSent(true);
       toast({
-        title: "OTP Sent",
-        description: "Check your email for the verification code",
+        title: "Success",
+        description: "Logged in successfully",
       });
+      
+      navigate("/welcome");
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
@@ -50,50 +49,10 @@ export default function Login() {
       } else {
         toast({
           title: "Error",
-          description: error instanceof Error ? error.message : "Failed to send OTP",
+          description: error instanceof Error ? error.message : "Login failed",
           variant: "destructive",
         });
       }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!otp || otp.length !== 6) {
-      toast({
-        title: "Invalid OTP",
-        description: "Please enter a valid 6-digit code",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const { error } = await supabase.auth.verifyOtp({
-        email,
-        token: otp,
-        type: "email",
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Logged in successfully",
-      });
-      
-      navigate("/");
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Invalid OTP",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
     }
@@ -112,73 +71,45 @@ export default function Login() {
               Sign in to start your session
             </h2>
 
-            {!otpSent ? (
-              <form onSubmit={handleSendOtp} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={loading}
-                >
-                  {loading ? "Sending..." : "Continue"}
-                </Button>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-                <div className="text-center">
-                  <Link to="/admin/auth/forgot-password" className="text-primary hover:underline text-sm">
-                    Forgot password?
-                  </Link>
-                </div>
-              </form>
-            ) : (
-              <form onSubmit={handleVerifyOtp} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="otp">Enter 6-digit code</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="000000"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    maxLength={6}
-                    required
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Code sent to {email}
-                  </p>
-                </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={loading}
+              >
+                {loading ? "Signing in..." : "Sign in"}
+              </Button>
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={loading}
-                >
-                  {loading ? "Verifying..." : "Verify & Sign In"}
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="w-full"
-                  onClick={() => {
-                    setOtpSent(false);
-                    setOtp("");
-                  }}
-                >
-                  Change Email
-                </Button>
-              </form>
-            )}
+              <div className="text-center">
+                <Link to="/admin/auth/forgot-password" className="text-primary hover:underline text-sm">
+                  Forgot password?
+                </Link>
+              </div>
+            </form>
           </div>
 
           <div className="text-center mt-6 space-y-2">

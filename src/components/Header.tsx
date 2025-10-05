@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Header = () => {
   const [showBanner, setShowBanner] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -59,6 +60,14 @@ const Header = () => {
             </div>
             
             <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <Menu className="w-5 h-5" />
+              </Button>
               <Button variant="default" size="lg" className="hidden sm:inline-flex">
                 Hire iOS Dev
               </Button>
@@ -74,6 +83,62 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-background border-b border-border">
+          <div className="container mx-auto px-4 py-4">
+            <nav className="flex flex-col space-y-4">
+              <a
+                href="#why"
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Why
+              </a>
+              <a
+                href="#industries"
+                className="text-foreground hover:text-primary transition-colors py-2 flex items-center gap-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Industries
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <a
+                href="#find"
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Find iOS Dev
+              </a>
+              <a
+                href="#vendor"
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Apply as Vendor
+              </a>
+              <div className="pt-4 border-t border-border flex flex-col gap-2">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Hire iOS Dev
+                </Button>
+                <Link to="/admin/auth/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" size="sm" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import test1 from "@/assets/test-1.png";
 
 const industries = [
   "Healthcare",
@@ -14,13 +15,8 @@ const industries = [
 const IndustrySection = () => {
   const [selectedIndustry, setSelectedIndustry] = useState("Capital Markets");
 
-  const developers = Array.from({ length: 16 }, (_, i) => ({
-    id: i,
-    image: `https://api.dicebear.com/7.x/avataaars/svg?seed=dev${i}`
-  }));
-
   return (
-    <section className="bg-background py-16">
+    <section className="bg-background py-16 mx-48">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-8">
@@ -48,16 +44,14 @@ const IndustrySection = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
-            {developers.map((dev) => (
-              <div key={dev.id} className="aspect-square rounded-lg overflow-hidden bg-secondary">
-                <img
-                  src={dev.image}
-                  alt={`Developer ${dev.id}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+          <div className="flex justify-center">
+            <div className="w-full max-w-md rounded-lg overflow-hidden bg-secondary">
+              <img
+                src={test1}
+                alt="Developer"
+                className="w-full h-auto object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>

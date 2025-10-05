@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
 
 @layer base {
   :root {
@@ -19,7 +16,6 @@ All colors MUST be HSL.
 
     --primary: 239 84% 67%;
     --primary-foreground: 0 0% 100%;
-    
     --primary-dark: 239 60% 50%;
     --primary-light: 239 84% 75%;
 
@@ -41,12 +37,12 @@ All colors MUST be HSL.
 
     --dark-bg: 222 47% 7%;
     --dark-card: 222 47% 11%;
-    
+
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
     --radius: 0.75rem;
-    
+
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
@@ -60,3 +56,86 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+
+@keyframes scrollTrain {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scrollTrain 25s linear infinite;
+}
+
+
+@keyframes liftUp {
+  0%, 80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(-40px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+.card-wrapper {
+  position: relative;
+}
+
+.card {
+  animation: liftUp 25s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Sequential delays for smooth lift timing */
+.card-wrapper:nth-child(1) .card { animation-delay: 0s; }
+.card-wrapper:nth-child(2) .card { animation-delay: 3s; }
+.card-wrapper:nth-child(3) .card { animation-delay: 6s; }
+.card-wrapper:nth-child(4) .card { animation-delay: 9s; }
+.card-wrapper:nth-child(5) .card { animation-delay: 12s; }
+.card-wrapper:nth-child(6) .card { animation-delay: 15s; }
+.card-wrapper:nth-child(7) .card { animation-delay: 18s; }
+.card-wrapper:nth-child(8) .card { animation-delay: 21s; }
+
+
+.card:hover {
+  transform: translateY(-6px);
+  transition: var(--transition-smooth);
+}
+
+/* === Train Animation: Right → Left === */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-scroll-left {
+  animation: scroll-left 15s linear infinite;
+}
+
+/* === Train Animation: Left → Right === */
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.animate-scroll-right {
+  animation: scroll-right 15s linear infinite;
+}
+
+

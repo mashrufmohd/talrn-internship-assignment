@@ -18,6 +18,7 @@ const organisationSchema = z.object({
   phoneNumber: z.string().min(1, "Phone number is required").max(20),
   city: z.string().min(1, "City is required").max(100),
   corporateRegistrationNumber: z.string().min(1, "Corporate registration number is required").max(50),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   referralCode: z.string().max(50).optional(),
 });
 
@@ -27,6 +28,7 @@ const individualSchema = z.object({
   workEmail: z.string().email("Invalid email address").max(255),
   phoneNumber: z.string().min(1, "Phone number is required").max(20),
   city: z.string().min(1, "City is required").max(100),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   referralCode: z.string().max(50).optional(),
 });
 
@@ -48,6 +50,7 @@ export default function Signup() {
     phoneNumber: "",
     city: "",
     corporateRegistrationNumber: "",
+    password: "",
     referralCode: "",
   });
 
@@ -57,6 +60,7 @@ export default function Signup() {
     workEmail: "",
     phoneNumber: "",
     city: "",
+    password: "",
     referralCode: "",
   });
 
@@ -71,11 +75,12 @@ export default function Signup() {
       setLoading(true);
 
       const email = formData.workEmail;
+      const password = formData.password;
 
-      const { error } = await supabase.auth.signInWithOtp({
+      const { error } = await supabase.auth.signUp({
         email,
+        password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
           data: {
             account_type: accountType,
             ...formData,
@@ -87,7 +92,7 @@ export default function Signup() {
 
       setOtpSent(true);
       toast({
-        title: "Verification Email Sent",
+        title: "OTP Sent",
         description: "Check your email for the verification code",
       });
     } catch (error) {
@@ -100,7 +105,7 @@ export default function Signup() {
       } else {
         toast({
           title: "Error",
-          description: error instanceof Error ? error.message : "Failed to create account",
+          description: error instanceof Error ? error.message : "Failed to send OTP",
           variant: "destructive",
         });
       }
@@ -164,7 +169,7 @@ export default function Signup() {
           description: "Account created successfully",
         });
 
-        navigate("/");
+        navigate("/welcome");
       }
     } catch (error) {
       toast({
@@ -191,13 +196,13 @@ export default function Signup() {
                 <h2 className="text-3xl font-semibold text-center mb-4 text-foreground">
                   Create your Talrn Account
                 </h2>
-                
-                <p className="text-center text-muted-foreground mb-4">
-                  Talrn is an exclusive network of the world's top talent.
-                </p>
-                <p className="text-center text-muted-foreground mb-8">
-                  We provide access to top companies and resources that can help accelerate your growth.
-                </p>
+            
+            <p className="text-center text-muted-foreground mb-4">
+              Talrn is an exclusive network of the world's top talent.
+            </p>
+            <p className="text-center text-muted-foreground mb-8">
+              We provide access to top companies and resources that can help accelerate your growth.
+            </p>
 
                 <Tabs value={accountType} onValueChange={(v) => setAccountType(v as "organisation" | "individual")} className="mb-6">
                   <TabsList className="grid w-full grid-cols-2">
@@ -315,6 +320,17 @@ export default function Signup() {
                         </div>
                       </div>
 
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Password *</Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          value={orgForm.password}
+                          onChange={(e) => setOrgForm({ ...orgForm, password: e.target.value })}
+                          required
+                        />
+                      </div>
+
                       <Button type="submit" className="w-full mt-6" disabled={loading}>
                         {loading ? "Creating Account..." : "Register"}
                       </Button>
@@ -387,6 +403,17 @@ export default function Signup() {
                         </div>
                       </div>
 
+                      <div className="space-y-2">
+                        <Label htmlFor="indPassword">Password *</Label>
+                        <Input
+                          id="indPassword"
+                          type="password"
+                          value={indForm.password}
+                          onChange={(e) => setIndForm({ ...indForm, password: e.target.value })}
+                          required
+                        />
+                      </div>
+
                       <Button type="submit" className="w-full mt-6" disabled={loading}>
                         {loading ? "Creating Account..." : "Register"}
                       </Button>
@@ -436,16 +463,14 @@ export default function Signup() {
             )}
           </div>
 
-          {!otpSent && (
-            <div className="text-center mt-6">
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Link to="/admin/auth/login" className="text-primary hover:underline">
-                  Login
-                </Link>
-              </p>
-            </div>
-          )}
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link to="/admin/auth/login" className="text-primary hover:underline">
+                Login
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
