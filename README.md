@@ -237,4 +237,4 @@ For support or questions, please contact the development team.
 
 ---
 
-**Built with ❤️ using React, TypeScript, and modern web technologies**
+**Built with React, TypeScript, and modern web technologies**
